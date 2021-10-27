@@ -24,9 +24,9 @@ class Database
         }
     }
 
-    function __destruct()
+    public function __destruct()
     {
-        mysqli_close($this->con);
+        //mysqli_close($this->con);
         self::$instance = null;
     }
 

@@ -11,6 +11,7 @@ class Auth extends Controller
 
     public function post_login()
     {
+        $statement = $this->database->prepare('INSERT INTO users(username,password) VALUES(?,?)');
         $_SESSION['user_logged_in'] = true;
         $this->response->redirect('/');
     }
@@ -23,7 +24,7 @@ class Auth extends Controller
 
     public function get_register()
     {
-
+        $this->view('auth/register');
     }
 
     public function post_register()
