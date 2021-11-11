@@ -5,3 +5,4 @@
     define('DB_PASS', '');
     define('DB_PORT', '3306');
     define('DB_NAME', 'thegioididong');
+    define("PATH_PUBLIC", PATH_ROOT . "/public");
