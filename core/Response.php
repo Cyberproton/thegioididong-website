@@ -25,6 +25,12 @@ class Response
         
     }
 
+    public function json(array $data) 
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($data);
+    }
+
     public function view(string $view_name, array $data = [], ?string $layout_name = 'main')
     {
         View::render($view_name, $data, $layout_name);

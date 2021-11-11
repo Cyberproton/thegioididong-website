@@ -9,6 +9,6 @@
 </head>
 <body>
     <h2>Home Page</h2>
-    <button class="btn btn-success">Test</button>
+    <button class="btn btn-success"><?php echo $demo; echo $test; ?></button>
 </body>
 </html>

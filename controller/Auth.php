@@ -29,6 +29,9 @@ class Auth extends Controller
 
     public function post_register()
     {
-
+        echo($this->request->get_body()['username']);
+        echo($this->request->get_body()['password']);
+        echo($this->request->get_body()['confirm-password']);
+        echo($this->request->get_method());
     }
 }

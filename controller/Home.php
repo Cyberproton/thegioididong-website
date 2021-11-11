@@ -6,7 +6,7 @@ class Home extends Controller
 {
     public function index()
     {
-        $this->view('index', [ 'title' => 'Home' ]);
+        $this->view('index', [ 'demo' => 'sfddfdfsdf', 'test' => 'Test' ], 'mylayout');
     }
 
     public function you() {

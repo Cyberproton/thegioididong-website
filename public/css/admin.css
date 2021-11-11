@@ -1,0 +1,28 @@
+.logo {
+    max-width: 200px;
+    width: 30%;
+    min-width: 150px;
+}
+
+.logo-only {
+    width: 10%;
+}
+
+.dark-on-hover {
+    color: black;
+    background-color: rgba(0, 0, 0, 0);
+    color: black;
+    transition: 0.3s;
+}
+
+.dark-on-hover:hover {
+    background-color: #dee2e6;
+}
+
+.zoom-on-hover {
+    transition: transform .2s;
+}
+
+.zoom-on-hover:hover {
+    transform: scale(1.5);
+}

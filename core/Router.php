@@ -80,9 +80,6 @@ class Router
         // Handler is controller
         else if (is_array($handler))
         {
-            echo '<pre>';
-            var_dump($handler[0]);
-            echo '</pre>';
             if (class_exists($handler[0])) 
             {
                 $controller = new $handler[0]($handler[1], $this->request, $this->response);
