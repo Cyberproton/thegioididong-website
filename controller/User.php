@@ -6,6 +6,6 @@ class User extends Controller
 {
     public function index()
     {
-        $this->view('user');
+        $this->view('user/user');
     }
 }

@@ -2,14 +2,13 @@
 
 namespace controller;
 
+use model\DeviceModel;
+
 class Home extends Controller
 {
-    public function index()
+    public function get_home() 
     {
-        $this->view('index', [ 'demo' => 'sfddfdfsdf', 'test' => 'Test' ], 'mylayout');
-    }
-
-    public function you() {
-        echo 'Hello you';
+        $devices = DeviceModel::get_devices();
+        $this->view("index", [ "devices" => $devices ]);
     }
 }
