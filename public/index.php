@@ -2,6 +2,7 @@
 
 use controller\About;
 use controller\Auth;
+use controller\Cart;
 use controller\Device;
 use controller\Home;
 use controller\User;
@@ -13,11 +14,13 @@ require_once __DIR__ . '/../util/autoload.php';
 
 $app = new App();
 
-$app->router->get('/', [ Home::class, 'index' ]);
+$app->router->get("/", [ Home::class, "get_home" ]);
 
 $app->router->get('/home', function ($req, $res) {
     $res->redirect('/');
 });
+
+$app->router->get("/product", [ Device::class, "get_devices" ]);
 
 $app->router->get('/login', [ Auth::class, 'get_login' ]);
 
@@ -33,19 +36,23 @@ $app->router->get('/about', function() { echo 'You are visiting about'; }, [ Abo
 
 $app->router->get('/user', new RequireLoginMiddleware(), [ User::class, 'index' ]);
 
-$app->router->get('/admin/devices', new RequireAdminLoginMiddleware(), [ Device::class, "get_devices" ]);
+$app->router->get("/device", [ Device::class, "get_device" ]);
 
-$app->router->get('/admin/device', new RequireAdminLoginMiddleware(), [ Device::class, "get_device" ]);
+$app->router->get("/cart", [ Cart::class, "get_cart" ]);
 
-$app->router->get('/admin/device/add', new RequireAdminLoginMiddleware(), [ Device::class, "get_add_device" ]);
+$app->router->get('/admin/devices', new RequireAdminLoginMiddleware(), [ Device::class, "get_admin_devices" ]);
 
-$app->router->post('/admin/device/add', new RequireAdminLoginMiddleware(), [ Device::class, "add_device" ]);
+$app->router->get('/admin/device', new RequireAdminLoginMiddleware(), [ Device::class, "get_admin_device" ]);
 
-$app->router->get('/admin/device/edit/', new RequireAdminLoginMiddleware(), [ Device::class, "get_edit_device" ]);
+$app->router->get('/admin/device/add', new RequireAdminLoginMiddleware(), [ Device::class, "get_admin_add_device" ]);
 
-$app->router->post('/admin/device/edit/', new RequireAdminLoginMiddleware(), [ Device::class, "update_device" ]);
+$app->router->post('/admin/device/add', new RequireAdminLoginMiddleware(), [ Device::class, "post_admin_add_device" ]);
 
-$app->router->post('/admin/device/delete', new RequireAdminLoginMiddleware(), [ Device::class, "delete_device" ]);
+$app->router->get('/admin/device/edit/', new RequireAdminLoginMiddleware(), [ Device::class, "get_admin_edit_device" ]);
+
+$app->router->post('/admin/device/edit/', new RequireAdminLoginMiddleware(), [ Device::class, "post_admin_update_device" ]);
+
+$app->router->post('/admin/device/delete', new RequireAdminLoginMiddleware(), [ Device::class, "post_admin_delete_device" ]);
 
 $app->router->use(function($req, $res) {
     $res->view('404');

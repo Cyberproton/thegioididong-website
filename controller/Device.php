@@ -7,31 +7,31 @@ use model\DeviceModel;
 
 class Device extends Controller 
 {
-    public function get_devices()
+    public function get_admin_devices()
     {
         $this->view("admin/device/index", [ "title" => "Admin Device Manager", "devices" => DeviceModel::get_devices() ], "admin");
     }
 
-    public function get_device()
+    public function get_admin_device()
     {
         $device_id = $this->request->get_params()["id"] ?? null;
         $this->view("admin/device/device_detail", [ "title" => "Admin Device Manager", "device" => $device_id ? DeviceModel::get_device($device_id) : null ], "admin");
     }
 
-    public function get_add_device()
+    public function get_admin_add_device()
     {
         $categories = CategoryModel::find();
         $this->view("admin/device/device_add", [ "title" => "Admin Device Manager", "categories" => $categories ], "admin");
     }
 
-    public function get_edit_device()
+    public function get_admin_edit_device()
     {
         $categories = CategoryModel::find();
         $device_id = $this->request->get_params()["id"] ?? null;
         $this->view("admin/device/device_editor", [ "title" => "Admin Device Editor", "categories" => $categories, "device" => $device_id ? DeviceModel::get_device($device_id) : null ], "admin");
     }
 
-    public function add_device()
+    public function post_admin_add_device()
     {
         $body = $this->request->get_body();
         $categories = CategoryModel::find();
@@ -57,7 +57,7 @@ class Device extends Controller
         $this->render_add(null, $categories, "Device added successfully", true);
     }
 
-    public function update_device()
+    public function post_admin_update_device()
     {
         $categories = CategoryModel::find();
         $id = $this->request->get_params()["id"] ?? null;
@@ -96,7 +96,7 @@ class Device extends Controller
         $this->render_editor($device, $categories, $message, true);
     }
 
-    public function delete_device() 
+    public function post_admin_delete_device() 
     {
         $id = $this->request->get_params()["id"] ?? null;
         if (!$id) 
@@ -111,6 +111,22 @@ class Device extends Controller
             return;
         }
         $this->response->json([ "message" => "Device deleted successfully" ]);
+    }
+
+    public function get_devices()
+    {
+        $key = $this->request->get_params()["key"] ?? "";
+        $categories = CategoryModel::find();
+        $devices = DeviceModel::find_devices_by_name($key);
+        $res = $devices;
+        $this->view("device/product", [ "search_key" => $key, "devices" => $res, "categories" => $categories ]);
+    }
+
+    public function get_device() 
+    {
+        $id = $this->request->get_params()["id"] ?? "";
+        $device = DeviceModel::get_device($id);
+        $this->view("device/detail", [ "device" => $device ]);
     }
 
     public function render_add(?DeviceModel $device = null, array $categories, ?string $message = null, bool $is_successful = false)

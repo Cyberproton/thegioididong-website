@@ -9,6 +9,7 @@ class DeviceModel extends Model
 {
     public const FIND_ALL_DEVICES = "SELECT * FROM device";
     public const FIND_DEVICE_BY_ID = "SELECT * FROM device WHERE device.id = ?";
+    public const FIND_DEVICES_BY_NAME = "SELECT * FROM device WHERE device.name LIKE ?";
     public const INSERT_DEVICE = "INSERT INTO device(`name`,price,`value`,image_url,manufacturer,`description`,category_id) VALUES(?,?,?,?,?,?,?)";
     public const UPDATE_DEVICE_BY_ID = "UPDATE device SET `name`=?,price=?,`value`=?,image_url=?,manufacturer=?,`description`=?,category_id=? WHERE id=?";
     public const DELETE_DEVICE_BY_ID = "DELETE FROM device WHERE id=?";
@@ -75,7 +76,7 @@ class DeviceModel extends Model
         return $data;
     }
 
-    public static function get_device(int $id): ?DeviceModel
+    public static function find_device_by_id(int $id): ?DeviceModel 
     {
         $stmt = Database::connection()->prepare(DeviceModel::FIND_DEVICE_BY_ID);
         $stmt->bind_param("i", $id);
@@ -92,6 +93,28 @@ class DeviceModel extends Model
         {
             return null;
         }
+    }
+
+    public static function find_devices_by_name(string $name): array
+    {
+        $data = DeviceModel::get_devices();
+        $res = [];
+        $n = strtolower(iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", preg_replace('/\s+/', '', $name)));
+        foreach ($data as $device)
+        {
+            $device_n = strtolower(iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", preg_replace('/\s+/', '', $device->name)));
+            if (strpos($device_n, $n) !== false) 
+            {
+                $res[] = $device;
+            }
+        }
+
+        return $res;
+    }
+
+    public static function get_device(int $id): ?DeviceModel
+    {
+        return DeviceModel::find_device_by_id($id);
     }
 
     public static function insert_device(string $name, float $price, float $value, string $image_url, string $manufacturer, string $description, int $category_id): ?DeviceModel 
