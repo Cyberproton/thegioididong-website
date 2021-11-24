@@ -6,13 +6,14 @@ use core\Request;
 use core\Response;
 use middleware\Middleware;
 
-class RequireLoginMiddleware extends Middleware 
+class RequireLoginJSONMiddleware extends Middleware 
 {
     public function handle(Request $request, Response $response)
     {
         if ($_SESSION['user_logged_in'] ?? false !== true) 
         {
-            $response->redirect('/login');
+            $response->code(401);
+            $response->json([ "successful" => false, "message" => "Not Authorized" ]);
         }
     }
 }
