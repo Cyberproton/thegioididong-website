@@ -54,6 +54,20 @@ $app->router->post('/admin/device/edit/', new RequireAdminLoginMiddleware(), [ D
 
 $app->router->post('/admin/device/delete', new RequireAdminLoginMiddleware(), [ Device::class, "post_admin_delete_device" ]);
 
+$app->router->get("/admin/users", new RequireAdminLoginMiddleware(), [ User::class, "get_admin_users" ]);
+
+$app->router->get("/admin/user", new RequireAdminLoginMiddleware(), [ User::class, "get_admin_user" ]);
+
+$app->router->get("/admin/user/add", new RequireAdminLoginMiddleware(), [ User::class, "admin_get_add_user" ]);
+
+$app->router->post("/admin/user/add", new RequireAdminLoginMiddleware(), [ User::class, "admin_post_add_user" ]);
+
+$app->router->post("/admin/user/delete", new RequireAdminLoginMiddleware(), [ User::class, "admin_delete_user" ]);
+
+$app->router->post("/admin/user/change-password", new RequireAdminLoginMiddleware(), [ User::class, "admin_update_password" ]);
+
+$app->router->post("/admin/user/change-role", new RequireAdminLoginMiddleware(), [ User::class, "admin_update_role" ]);
+
 $app->router->use(function($req, $res) {
     $res->view('404');
 });
