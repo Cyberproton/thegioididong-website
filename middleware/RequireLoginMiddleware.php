@@ -10,7 +10,7 @@ class RequireLoginMiddleware extends Middleware
 {
     public function handle(Request $request, Response $response)
     {
-        if ($_SESSION['user_logged_in'] ?? false !== true) 
+        if (($_SESSION['user_logged_in'] ?? false) !== true) 
         {
             $response->redirect('/login');
         }

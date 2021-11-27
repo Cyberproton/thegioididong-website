@@ -9,11 +9,9 @@ class RequireAdminLoginMiddleware extends Middleware
 {
     public function handle(Request $request, Response $response)
     {
-        /*
-        if ($_SESSION['user_logged_in'] !== true) 
+        if ($_SESSION['admin_logged_in'] !== true) 
         {
             $response->redirect('/admin/login');
         }
-        */
     }
 }
