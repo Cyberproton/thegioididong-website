@@ -29,6 +29,7 @@ class Response
     {
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($data);
+        exit();
     }
 
     public function view(string $view_name, array $data = [], ?string $layout_name = 'main')
