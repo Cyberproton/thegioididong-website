@@ -10,10 +10,10 @@ class RequireLoginJSONMiddleware extends Middleware
 {
     public function handle(Request $request, Response $response)
     {
-        if ($_SESSION['user_logged_in'] ?? false !== true) 
+        if (($_SESSION['user_logged_in'] ?? false) !== true) 
         {
             $response->code(401);
-            $response->json([ "successful" => false, "message" => "Not Authorized" ]);
+            $response->json([ "successful" => false, "message" => "You haven't logged in to perform this action" ]);
         }
     }
 }

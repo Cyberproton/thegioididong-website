@@ -11,4 +11,9 @@ class Home extends Controller
         $devices = DeviceModel::get_devices();
         $this->view("index", [ "devices" => $devices ]);
     }
+
+    public function admin_home()
+    {
+        $this->view("admin/index", [], "admin");
+    }
 }

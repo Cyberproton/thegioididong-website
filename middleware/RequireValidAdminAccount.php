@@ -7,7 +7,7 @@ use core\Response;
 use middleware\Middleware;
 use model\UserModel;
 
-class RequireValidAccount extends Middleware 
+class RequireValidAdminAccount extends Middleware 
 {
     public function handle(Request $request, Response $response)
     {
@@ -15,13 +15,15 @@ class RequireValidAccount extends Middleware
         {
             unset($_SESSION['admin_logged_in']);
             unset($_SESSION["admin_id"]);
+            $response->code(401);
             $response->redirect('/account-not-exists');
         }
         $user = UserModel::find_user_by_id($_SESSION["admin_id"]);
-        if ($user === null || $user->is_deleted === true)
+        if ($user === null || $user->is_deleted === true || $user->role !== "ADMIN")
         {
             unset($_SESSION['admin_logged_in']);
             unset($_SESSION["admin_id"]);
+            $response->code(401);
             $response->redirect('/admin/account-not-exists');
         }
     }

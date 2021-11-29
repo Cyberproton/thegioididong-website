@@ -22,5 +22,6 @@ class App
 
     public function run() {
         $this->router->resolve();
+        $this->database->connection()->close();
     }
 }

@@ -1,13 +1,18 @@
 <div class="container-md mt-3">
-    <?php if (strlen($search_key) < 1) { ?>
-        <h3 class="mt-4 mb-3">Total <?php echo sizeof($devices) ?> products(s)</h3>
-    <?php } else { ?>
-        <h3 class="mt-4 mb-3">Search result for: "<?php echo $search_key ?>". Found <?php echo sizeof($devices) ?> products(s)</h3>
+    <?php
+    if (strlen($search_key) < 1) {
+        $devices = array_values(array_filter($devices, function ($d) { return $d->is_deleted !== true; }));
+    ?>
+        <h4 class="mt-4 mb-3">Total <?php echo sizeof($devices) ?> products(s)</h4>
+    <?php
+    } else {
+    ?>
+        <h4 class="mt-4 mb-3">Search result for: "<?php echo $search_key ?>". Found <?php echo sizeof($devices) ?> products(s)</h4>
     <?php } ?>
-    
+
     <div class="container my-3">
         <ul class="nav nav-pills overflow-auto" style="white-space: nowrap; flex-wrap: nowrap;">
-            <span class="d-flex align-items-center me-3 fs-5">Categories: </span>
+            <span class="d-flex align-items-center me-3">Categories: </span>
             <li class="nav-item">
                 <button class="nav-link <?php if (!isset($current_category)) echo "active" ?>" aria-current="page" onclick="filterByCategory(<?php echo -1 ?>)" id="category-<?php echo -1 ?>">All</button>
             </li>
@@ -20,7 +25,7 @@
     </div>
     <div class="container my-3">
         <ul class="nav nav-pills overflow-auto" style="white-space: nowrap; flex-wrap: nowrap;">
-            <span class="d-flex align-items-center me-3 fs-5">Price: </span>
+            <span class="d-flex align-items-center me-3">Price: </span>
             <li class="nav-item">
                 <button class="nav-link active" aria-current="page" id="price-order-des" onclick="sortByPrice('des')">High First</button>
             </li>

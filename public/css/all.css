@@ -8,3 +8,94 @@
     display: inline-block;
     float: none;
 }
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: lightgray;
+}
+
+.divider::after,
+.divider::before {
+    content: "";
+    border: 1px solid lightgray;
+    flex: 1;
+}
+
+.divider:not(:empty)::before {
+    margin-right: 0.25em;
+}
+
+.divider:not(:empty)::after {
+    margin-left: 0.25em;
+}
+
+input#session-date {
+    position: relative;
+    overflow: hidden;
+}
+
+input#session-date::-webkit-calendar-picker-indicator {
+    display: block;
+    top: 0;
+    left: 0;
+    background: #0000;
+    position: absolute;
+    transform: scale(12)
+}
+
+.rate {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+}
+
+.rate:not(:checked)>input {
+    position: absolute;
+    top: -9999px;
+}
+
+.rate:not(:checked)>label {
+    float: right;
+    width: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 30px;
+    color: #ccc;
+}
+
+.rate:not(:checked)>label:before {
+    content: '★ ';
+}
+
+.rate>input:checked~label {
+    color: #ffc107;
+}
+
+.rate:not(:checked)>label:hover,
+.rate:not(:checked)>label:hover~label {
+    color: #fd7e14;
+}
+
+.rate>input:checked+label:hover,
+.rate>input:checked+label:hover~label,
+.rate>input:checked~label:hover,
+.rate>input:checked~label:hover~label,
+.rate>label:hover~input:checked~label {
+    color: #fd7e14;
+}
+
+.about-heading {
+    font-family: 'Roboto', sans-serif;
+}
+
+.about-heading::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 50px;
+    height: 2px;
+    background-color: green;
+  }

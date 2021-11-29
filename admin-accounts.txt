@@ -1,0 +1,5 @@
+username: manager
+password: 123456
+
+username: tranhoangquan
+password: 123456

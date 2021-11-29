@@ -4,12 +4,14 @@ namespace controller;
 
 use model\CategoryModel;
 use model\DeviceModel;
+use model\OrderModel;
+use model\RatingModel;
 
 class Device extends Controller 
 {
     public function get_admin_devices()
     {
-        $this->view("admin/device/index", [ "title" => "Admin Device Manager", "devices" => DeviceModel::get_devices() ], "admin");
+        $this->view("admin/device/index", [ "title" => "Admin Device Manager", "devices" => DeviceModel::get_devices(), "categories" => CategoryModel::find() ], "admin");
     }
 
     public function get_admin_device()
@@ -36,16 +38,10 @@ class Device extends Controller
         $body = $this->request->get_body();
         $categories = CategoryModel::find();
         $device = new DeviceModel();
-        $check = $device->load($body);
+        $check = $device->validate_and_load($body);
         if (!$check["is_successful"])
         {
             $this->render_add($device, $categories, $check["message"], false);
-            return;
-        }
-        $res = $device->validate();
-        if (!$res["is_successful"]) 
-        {
-            $this->render_add($device, $categories, $res["message"], false);
             return;
         }
         $inserted_device = $device->insert();
@@ -79,8 +75,7 @@ class Device extends Controller
 
         $new_device = new DeviceModel();
         $new_device->id = $id;
-        $new_device->load($body);
-        $res = $new_device->validate();
+        $res = $new_device->validate_and_load($body);
 
         if ($res["is_successful"]) 
         {
@@ -124,9 +119,15 @@ class Device extends Controller
 
     public function get_device() 
     {
+        $user_id = $_SESSION["user_id"] ?? null;
+        $has_ordered = null;
         $id = $this->request->get_params()["id"] ?? "";
         $device = DeviceModel::get_device($id);
-        $this->view("device/detail", [ "device" => $device ]);
+        $ratings = RatingModel::find_by_device($id);
+        if ($user_id !== null) {
+            $has_ordered = OrderModel::find_by_id_and_device($user_id, $id);
+        }
+        $this->view("device/detail", [ "device" => $device, "ratings" => $ratings, "has_ordered" => $has_ordered, "is_logged_in" => $user_id !== null ]);
     }
 
     public function render_add(?DeviceModel $device = null, array $categories, ?string $message = null, bool $is_successful = false)

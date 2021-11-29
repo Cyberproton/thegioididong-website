@@ -26,3 +26,7 @@
 .zoom-on-hover:hover {
     transform: scale(1.5);
 }
+
+.sidebar {
+    min-height: 500px;
+}

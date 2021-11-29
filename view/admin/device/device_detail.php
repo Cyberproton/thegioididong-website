@@ -1,23 +1,48 @@
-<div class="container-fluid mt-3">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-2 d-none d-sm-block">
-            <div class="list-group">
-                <a href="/admin/devices" class="list-group-item list-group-item-action bg-warning">
-                    Devices
-                </a>
-                <a href="#" class="list-group-item list-group-item-action bg-light">Orders</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light">News</a>
+        <div class="col col-md-3 col-lg-2 d-none d-md-block p-3 shadow sidebar">
+            <div class="row justify-content-center">
+                <span class="text-center fs-5">Menu</span>
             </div>
+            <hr />
+            <ul class="nav nav-pills flex-column sidebar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin"><i class="fas fa-home me-2"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/devices"><i class="fas fa-mobile-alt me-2"></i> Devices</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="/admin/users"><i class="fas fa-user me-2"></i> Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/order"><i class="fas fa-shopping-bag me-2"></i> Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/news"><i class="fas fa-newspaper me-2"></i> News</a>
+                </li>
+                <hr />
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/user?id=<?php echo $_SESSION["admin_id"] ?>"><i class="fas fa-id-card me-2"></i> Account</a>
+                </li>
+                <li class="nav-item">
+                    <form action="/admin/logout" method="post">
+                        <button class="nav-link text-danger" type="submit"><i class="fas fa-sign-in-alt me-2"></i> Logout</a>
+                    </form>
+                </li>
+            </ul>
         </div>
-        <div class="col-xs-12 col-md-10">
-            <?php if ($device) { ?>
+        <div class="col col-12 col-md-9 col-lg-10 mt-3">
+            <?php if (isset($device) && $device->is_deleted !== true) { ?>
                 <div class="container mt-3">
                     <div id="page-alert" class="alert alert-success alert-dismissible" role="alert">
-                        
+
                     </div>
                     <div class="row gx-5">
                         <div class="col col-12 col-md-4">
+                        <?php if (isset($device->image_url) && strlen($device->image_url) > 0) { ?>
                             <img src=<?php echo $device->image_url ?> alt="<?php echo $device->name ?>" style="max-width: 100%;" />
+                        <?php } ?>
                         </div>
                         <div class="col col-12 col-md-8">
                             <h4 class="text-center mt-3"><?php echo $device->name ?></h4>
@@ -33,12 +58,6 @@
                             <h5>Price: <span class="text-danger"><?php echo $device->price . "$" ?></span></h5>
                             <h5>Real Value: <span class="text-danger"><?php echo $device->value . "$" ?></span></h5>
                         </div>
-                    </div>
-                    <div class="row mt-5">
-                        <h5>Specification</h5>
-                    </div>
-                    <div class="row mt-5">
-                        <h5>Customer Reviews</h5>
                     </div>
                 </div>
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -65,10 +84,10 @@
                 </div>
             <?php } else { ?>
                 <div class="d-flex justify-content-center m-5">
-                    <h3>Không tìm thấy sản phẩm</h3>
+                    <h3>This device does not exist</h3>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <a class="btn btn-dark" href="/admin/devices" role="button">Quay lại trang sản phẩm</a>
+                    <a class="btn btn-dark" href="/admin/devices" role="button">Back to Device Manager</a>
                 </div>
             <?php } ?>
         </div>

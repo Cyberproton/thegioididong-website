@@ -2,6 +2,7 @@
 
 namespace model;
 
+use DateTime;
 use Throwable;
 
 class Model 
@@ -54,5 +55,10 @@ class Model
     public static function get_validation_message_static(?string $message, bool $is_successful): array 
     {
         return [ "message" => $message, "is_successful" => $is_successful];
+    }
+
+    public static function validate_datetime($date, $format = 'Y-m-d H:i:s') {
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) === $date;
     }
 }

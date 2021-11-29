@@ -12,7 +12,7 @@ class DeviceModel extends Model
     public const FIND_DEVICES_BY_NAME = "SELECT * FROM device WHERE device.name LIKE ?";
     public const INSERT_DEVICE = "INSERT INTO device(`name`,price,`value`,image_url,manufacturer,`description`,category_id) VALUES(?,?,?,?,?,?,?)";
     public const UPDATE_DEVICE_BY_ID = "UPDATE device SET `name`=?,price=?,`value`=?,image_url=?,manufacturer=?,`description`=?,category_id=? WHERE id=?";
-    public const DELETE_DEVICE_BY_ID = "DELETE FROM device WHERE id=?";
+    public const DELETE_DEVICE_BY_ID = "UPDATE device SET `is_deleted`=1 WHERE id=?";
     
     public int $id;
     public string $name;
@@ -22,6 +22,42 @@ class DeviceModel extends Model
     public string $manufacturer;
     public string $description;
     public int $category_id;
+    public bool $is_deleted;
+
+    public function validate_data(array $data): array
+    {
+        $name = $data["name"] ?? null;
+        $price = $data["price"] ?? null;
+        $value = $data["value"] ?? null;
+        $manufacturer = $data["manufacturer"] ?? null;
+        $description = $data["description"] ?? null;
+        $category_id = $data["category_id"] ?? null;
+        if (!$name || strlen($name) < 3 || strlen($name) > 64)
+        {
+            return [ "message" => "Name length must be between 3 and 64 characters", "is_successful" => false ];
+        }
+        if (!$price || !is_numeric($price) && !is_int((int) $price)) 
+        {
+            return [ "message" => "Invalid price", "is_successful" => false ];
+        }
+        if (!$value || !is_numeric($price) && !is_int((int) $price)) 
+        {
+            return $this->get_validation_message("Invalid value", false);
+        }
+        if ($manufacturer && strlen($manufacturer) > 64) 
+        {
+            return $this->get_validation_message("Brand name  must not larger than 64 characters", false);
+        }
+        if ($description && strlen($description) > 10240) 
+        {
+            return $this->get_validation_message("Description must not larger than 10240 characters", false);
+        }
+        if (!$category_id || !is_numeric($category_id) && !is_int((int) $category_id) || $category_id < 1 || !CategoryModel::find_by_id($category_id))
+        {
+            return $this->get_validation_message("Invalid device's category", false);
+        }
+        return $this->get_validation_message("Done", true);
+    }
 
     public function validate(): array
     {
@@ -49,7 +85,7 @@ class DeviceModel extends Model
         {
             return $this->get_validation_message("Please choose device's category", false);
         }
-        return $this->get_validation_message("Thành công", true);
+        return $this->get_validation_message("Done", true);
     }
 
     public function insert(): ?DeviceModel 
@@ -70,6 +106,10 @@ class DeviceModel extends Model
         {
             $device = new DeviceModel();
             $device->load($row);
+            /*
+            if ($device->is_deleted) {
+                continue;
+            }*/
             $data[] = $device;
         }
         $res->close();
@@ -87,6 +127,10 @@ class DeviceModel extends Model
         {
             $model = new DeviceModel();
             $model->load($data);
+            /*
+            if ($model->is_deleted) {
+                return null;
+            }*/
             return $model;
         }
         else 
@@ -102,6 +146,10 @@ class DeviceModel extends Model
         $n = strtolower(iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", preg_replace('/\s+/', '', $name)));
         foreach ($data as $device)
         {
+            /*
+            if ($device->is_deleted) {
+                continue;
+            }*/
             $device_n = strtolower(iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", preg_replace('/\s+/', '', $device->name)));
             if (strpos($device_n, $n) !== false) 
             {
